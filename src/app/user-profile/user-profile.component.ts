@@ -10,7 +10,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 export class UserProfileComponent implements OnInit {
 
-  constructor(public auth: AuthService, private msgService: MessagingService) { }
+  constructor(public auth: AuthService, public msgService: MessagingService) { }
 
   formUser = {
     email: 'testuser1@test.com',
@@ -18,6 +18,7 @@ export class UserProfileComponent implements OnInit {
   };
 
   ngOnInit() {
+    // this.subscribe();
   }
 
   onSignInButtonClick() {
@@ -29,7 +30,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  onSubscribeClick() {
+  subscribe() {
     this.msgService.getPermission();
     this.msgService.receiveMessages();
   }

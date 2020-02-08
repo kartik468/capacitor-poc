@@ -43,18 +43,12 @@
         <mat-card-title>{{ user.displayName }}</mat-card-title>
         <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
         <mat-card-subtitle>{{ user.uid }}</mat-card-subtitle>
+        <mat-card-subtitle><pre>{{ user | json }}</pre></mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-actions>
-        <button mat-stroked-button color="primary" (click)="onSubscribeClick()">
+        <button mat-stroked-button color="primary" (click)="subscribe()">
           Subscribe
-        </button>
-        <button
-          mat-stroked-button
-          color="primary"
-          (click)="onPushMessageClick()"
-        >
-          Push Message
         </button>
       </mat-card-actions>
     </mat-card>

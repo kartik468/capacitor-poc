@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { take, mergeMapTo } from 'rxjs/operators';
@@ -9,6 +9,8 @@ import {
 } from '@angular/fire/firestore';
 import { User } from 'firebase';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AppUser } from './models/AppUser';
 
 @Injectable({
   providedIn: 'root'
@@ -19,14 +21,20 @@ export class MessagingService {
     private afd: AngularFireDatabase,
     private afs: AngularFirestore,
     private afMessaging: AngularFireMessaging,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private snackBar: MatSnackBar,
+    private zone: NgZone
   ) {
-    // this.afMessaging.messaging.subscribe(
-    //     (messaging) => {
-    //       messaging.onMessage = messaging.onMessage.bind(messaging);
-    //       messaging.onTokenRefresh = messaging.onTokenRefresh.bind(messaging);
-    //     }
-    //   )
+    this.afMessaging.messaging.subscribe((messaging: any) => {
+      messaging._next = (payload: any) => {
+        console.log(payload);
+        this.openSnackBar(
+          payload.notification.body,
+          payload.notification.title
+        );
+      };
+      messaging.onTokenRefresh = messaging.onTokenRefresh.bind(messaging);
+    });
   }
 
   getPermission() {
@@ -35,6 +43,7 @@ export class MessagingService {
       .subscribe(
         token => {
           console.log('Permission granted! Save to the server!', token);
+          this.saveToken(token);
         },
         error => {
           console.error(error);
@@ -64,32 +73,41 @@ export class MessagingService {
   // }
 
   saveToken(token: string) {
-    this.afAuth.authState.pipe(take(1)).subscribe((user: any) => {
+    this.afAuth.authState.pipe(take(1)).subscribe((user: User) => {
       if (!user) {
         return;
       }
-      const currentTokens = user.fcmTokens || {};
-      console.log(currentTokens, token);
-
-      // If token does not exist in firestore, update db
-      if (!currentTokens[token]) {
-        const userRef = this.afs.collection('users').doc(user.uid);
-        const tokens = { ...currentTokens, [token]: true };
-        userRef.update({ fcmTokens: tokens });
-      }
-      // const data = {
-      //     token,
-      //     uid: user.uid
-      // };
-
-      // this.afs.collection('fcmTokens').add(data);
+      const userRef = this.afs.collection('users').doc(user.uid);
+      const fcmTokensRef = userRef.collection('fcmTokens');
+      fcmTokensRef
+        .valueChanges()
+        .pipe(take(1))
+        .subscribe(tokens => {
+          console.log(tokens);
+          if (!tokens.find(t => t.token === token)) {
+            fcmTokensRef.add({
+              token
+            });
+          } else {
+            console.log('token already exists');
+          }
+        });
     });
   }
 
   receiveMessages() {
     console.log('receive message function called');
-    this.afMessaging.messages.subscribe(payload => {
+    this.afMessaging.messages.subscribe((payload: any) => {
       console.log('Message received. ', payload);
+      this.openSnackBar(payload.notification.body, payload.notification.title);
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.zone.run(() => {
+      this.snackBar.open(message, action, {
+        duration: 5000
+      });
     });
   }
 
