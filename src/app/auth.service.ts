@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FirebaseAuth } from '@angular/fire';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +52,6 @@ export class AuthService {
     return this.updateUserData(credential.user);
   }
 
-
   private updateUserData(user) {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
@@ -74,9 +74,12 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  async signIn({ email, password}) {
+  async signIn({ email, password }) {
     try {
-      const credential = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+      const credential = await this.afAuth.auth.signInWithEmailAndPassword(
+        email,
+        password
+      );
       if (credential.user) {
         this.openSnackBar('signed in successfully', '');
       }

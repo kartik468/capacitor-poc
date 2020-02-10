@@ -1,56 +1,19 @@
-<div *ngIf="auth.user$ | async; then authenticated; else guest">
-  <!-- template will replace this div -->
-</div>
-
-<!-- User NOT logged in -->
-<ng-template #guest>
-  <!-- <h3>Howdy, GUEST</h3>
-<p>Login to get started...</p>
-
-<button (click)="auth.googleSignin()">
-    <i class="fa fa-google"></i> Connect Google
-</button> -->
-  <form class="signin-form" autocomplete="off" #userForm="ngForm">
-    <mat-form-field class="full-width">
-      <mat-label>Email</mat-label>
-      <input
-        matInput
-        required
-        email
-        name="email"
-        [(ngModel)]="formUser.email"
-      />
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <mat-label>Password</mat-label>
-      <input
-        matInput
-        required
-        type="text"
-        name="password"
-        [(ngModel)]="formUser.password"
-      />
-    </mat-form-field>
-    <button mat-raised-button color="primary" type="button" (click)="onSignInButtonClick()" [disabled]="!userForm.valid">SignIn</button>
-  </form>
-</ng-template>
-
 <!-- User logged in -->
-<ng-template #authenticated>
-  <div *ngIf="auth.user$ | async as user">
-    <mat-card class="example-card">
-      <mat-card-header>
-        <mat-card-title>{{ user.displayName }}</mat-card-title>
-        <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
-        <mat-card-subtitle>{{ user.uid }}</mat-card-subtitle>
-        <mat-card-subtitle><pre>{{ user | json }}</pre></mat-card-subtitle>
-      </mat-card-header>
+<div *ngIf="auth.user$ | async as user">
+  <mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title>{{ user.displayName }}</mat-card-title>
+      <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
+      <mat-card-subtitle>{{ user.uid }}</mat-card-subtitle>
+      <mat-card-subtitle
+        ><pre>{{ user | json }}</pre></mat-card-subtitle
+      >
+    </mat-card-header>
 
-      <mat-card-actions>
-        <button mat-stroked-button color="primary" (click)="subscribe()">
-          Subscribe
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-</ng-template>
+    <mat-card-actions>
+      <button mat-stroked-button color="primary" (click)="subscribe()">
+        Subscribe
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

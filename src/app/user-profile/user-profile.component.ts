@@ -9,26 +9,11 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
+  constructor(public auth: AuthService, public msgService: MessagingService) {}
 
-  constructor(public auth: AuthService, public msgService: MessagingService) { }
-
-  formUser = {
-    email: 'testuser1@test.com',
-    password: 'testuser1'
-  };
 
   ngOnInit() {
     // this.subscribe();
-  }
-
-  onSignInButtonClick() {
-    this.msgService.openSnackBar('signing in', '');
-    this.auth.signIn(this.formUser).then(() => {
-      // this.formUser = {
-      //   email: '',
-      //   password: ''
-      // };
-    });
   }
 
   subscribe() {
@@ -39,5 +24,4 @@ export class UserProfileComponent implements OnInit {
   onPushMessageClick() {
     this.msgService.sendPushMessage('first title', 'first message');
   }
-
 }

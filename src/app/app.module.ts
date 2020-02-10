@@ -14,19 +14,22 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress-spinner';
 
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
-  declarations: [AppComponent, UserProfileComponent],
+  declarations: [AppComponent, UserProfileComponent, LoginComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -39,6 +42,7 @@ import { FormsModule } from '@angular/forms';
     AngularFireStorageModule, // storage
     AngularFireDatabaseModule,
     AngularFireMessagingModule, // messaging
+    AngularFireAuthGuardModule,
 
     AppRoutingModule,
     ServiceWorkerModule.register('/combined-worker.js', {
@@ -50,9 +54,11 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatCardModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ MatSpinner ]
 })
 export class AppModule {}
