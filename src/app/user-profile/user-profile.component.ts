@@ -22,6 +22,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSignInButtonClick() {
+    this.msgService.openSnackBar('signing in', '');
     this.auth.signIn(this.formUser).then(() => {
       // this.formUser = {
       //   email: '',

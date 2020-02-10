@@ -108,6 +108,7 @@ export class MessagingService {
   }
 
   openSnackBar(message: string, action: string, timeout = 5000) {
+    console.log(message, action);
     this.zone.run(() => {
       this.snackBar.open(message, action, {
         duration: timeout
