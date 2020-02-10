@@ -41,7 +41,7 @@ import { FormsModule } from '@angular/forms';
     AngularFireMessagingModule, // messaging
 
     AppRoutingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
+    ServiceWorkerModule.register('/combined-worker.js', {
       enabled: environment.production
     }),
     BrowserAnimationsModule,

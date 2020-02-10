@@ -23,10 +23,10 @@ export class UserProfileComponent implements OnInit {
 
   onSignInButtonClick() {
     this.auth.signIn(this.formUser).then(() => {
-      this.formUser = {
-        email: '',
-        password: ''
-      };
+      // this.formUser = {
+      //   email: '',
+      //   password: ''
+      // };
     });
   }
 

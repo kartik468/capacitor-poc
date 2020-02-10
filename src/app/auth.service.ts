@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
 import { User, auth } from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 
 import { switchMap } from 'rxjs/operators';
 import { AngularFireMessaging } from '@angular/fire/messaging';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,9 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private zone: NgZone,
+    private snackBar: MatSnackBar
   ) {
     // Get the auth state, then fetch the Firestore user document or return null
     this.user$ = this.afAuth.authState.pipe(
@@ -67,12 +70,28 @@ export class AuthService {
 
   async signOut() {
     await this.afAuth.auth.signOut();
+    this.openSnackBar('signed out successfully', '');
     this.router.navigate(['/']);
   }
 
   async signIn({ email, password}) {
-    const credential = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
-    return this.updateUserData(credential.user);
-    console.log(credential);
+    try {
+      const credential = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+      if (credential.user) {
+        this.openSnackBar('signed in successfully', '');
+      }
+      return this.updateUserData(credential.user);
+    } catch (error) {
+      this.openSnackBar(error.message, '');
+      console.log(error);
+    }
+  }
+
+  openSnackBar(message: string, action: string, timeout = 5000) {
+    this.zone.run(() => {
+      this.snackBar.open(message, action, {
+        duration: timeout
+      });
+    });
   }
 }

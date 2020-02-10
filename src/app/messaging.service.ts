@@ -42,10 +42,12 @@ export class MessagingService {
       .pipe(mergeMapTo(this.afMessaging.tokenChanges))
       .subscribe(
         token => {
-          console.log('Permission granted! Save to the server!', token);
+          console.log('Permission granted!', token);
+          this.openSnackBar('Permission granted!', '');
           this.saveToken(token);
         },
         error => {
+          this.openSnackBar('Permission denied!!!', '');
           console.error(error);
         }
       );
@@ -85,11 +87,13 @@ export class MessagingService {
         .subscribe(tokens => {
           console.log(tokens);
           if (!tokens.find(t => t.token === token)) {
+            this.openSnackBar('Token saved to the server', '');
             fcmTokensRef.add({
               token
             });
           } else {
-            console.log('token already exists');
+            this.openSnackBar('token already exists in database!', '');
+            console.log('token already exists in database!');
           }
         });
     });
@@ -103,10 +107,10 @@ export class MessagingService {
     });
   }
 
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string, timeout = 5000) {
     this.zone.run(() => {
       this.snackBar.open(message, action, {
-        duration: 5000
+        duration: timeout
       });
     });
   }
