@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { LoginComponent } from './login/login.component';
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard';
+import { RouterModule, Routes } from '@angular/router';
+
+import { LoginComponent } from './login/login.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 const routes: Routes = [
   {

@@ -1,17 +1,11 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Observable, from, of } from 'rxjs';
-import { User, auth } from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
-import {
-  AngularFirestore,
-  AngularFirestoreDocument
-} from '@angular/fire/firestore';
-import { Router } from '@angular/router';
-
-import { switchMap } from 'rxjs/operators';
-import { AngularFireMessaging } from '@angular/fire/messaging';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FirebaseAuth } from '@angular/fire';
+import { Router } from '@angular/router';
+import { auth, User } from 'firebase';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

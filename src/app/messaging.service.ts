@@ -1,16 +1,12 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
-import { AngularFireMessaging } from '@angular/fire/messaging';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { take, mergeMapTo } from 'rxjs/operators';
 import { AngularFireDatabase } from '@angular/fire/database';
-import {
-  AngularFirestore,
-  AngularFirestoreDocument
-} from '@angular/fire/firestore';
-import { User } from 'firebase';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireMessaging } from '@angular/fire/messaging';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AppUser } from './models/AppUser';
+import { User } from 'firebase';
+import { mergeMapTo, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -102,6 +98,7 @@ export class MessagingService {
   receiveMessages() {
     console.log('receive message function called');
     this.afMessaging.messages.subscribe((payload: any) => {
+      // not getting called as of now; seems like everyone facing this issue and it should get fixed in upcoming releases
       console.log('Message received. ', payload);
       this.openSnackBar(payload.notification.body, payload.notification.title);
     });
@@ -118,39 +115,39 @@ export class MessagingService {
 
   // Sending the payload with fcm url
   // this requires server token
-  sendPushMessage(title, message) {
-    const data: any = {
-      notification: {
-        title,
-        body: message,
-        click_action: 'http://localhost:3000/',
-        icon: 'http://url-to-an-icon/icon.png',
-        sound: 'default'
-      },
-      to:
-        ''
-    };
+  // sendPushMessage(title, message) {
+  //   const data: any = {
+  //     notification: {
+  //       title,
+  //       body: message,
+  //       click_action: 'http://localhost:3000/',
+  //       icon: 'http://url-to-an-icon/icon.png',
+  //       sound: 'default'
+  //     },
+  //     to:
+  //       '<fcm-token>'
+  //     };
 
-    const postData = JSON.stringify(data);
-    const url = 'https://fcm.googleapis.com/fcm/send';
-    this.httpClient
-      .post(url, postData, {
-        headers: new HttpHeaders()
-          // put the server key here
-          .set(
-            'Authorization',
-            'key='
-          )
-          .set('Content-Type', 'application/json')
-      })
-      .subscribe(
-        (response: Response) => {
-          console.log(response);
-        },
-        (error: Response) => {
-          console.log(error);
-          console.log('error' + error);
-        }
-      );
-  }
+  //   const postData = JSON.stringify(data);
+  //   const url = 'https://fcm.googleapis.com/fcm/send';
+  //   this.httpClient
+  //     .post(url, postData, {
+  //       headers: new HttpHeaders()
+  //         // put the server key here
+  //         .set(
+  //           'Authorization',
+  //           'key=<server-key>'
+  //         )
+  //         .set('Content-Type', 'application/json')
+  //     })
+  //     .subscribe(
+  //       (response: Response) => {
+  //         console.log(response);
+  //       },
+  //       (error: Response) => {
+  //         console.log(error);
+  //         console.log('error' + error);
+  //       }
+  //     );
+  // }
 }

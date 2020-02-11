@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { AuthService } from '../auth.service';
 import { MessagingService } from '../messaging.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,6 +22,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   onPushMessageClick() {
-    this.msgService.sendPushMessage('first title', 'first message');
+    // this.msgService.sendPushMessage('first title', 'first message');
   }
 }
